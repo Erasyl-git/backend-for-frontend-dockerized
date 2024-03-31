@@ -25,9 +25,10 @@ class ProductList(ListAPIView):
     #parser_classes = (MultiPartParser, FormParser)
 
     def get_queryset(self):
-        category_slug = self.kwargs.get('slug')
-        if category_slug:
-            category = Category.objects.get(slug=category_slug)
+        category_pk = self.kwargs.get('pk')
+        if category_pk:
+            category = get_object_or_404(Category, pk=category_pk)
+            # Фильтруем продукты по категории
             return Product.objects.filter(category=category)
         
 
@@ -36,10 +37,10 @@ class ProductList(ListAPIView):
 class CategoryDetail(RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    lookup_field = 'slug'
+    lookup_field = 'pk'
 
     def get(self, request, *args, **kwargs):
-        category = get_object_or_404(self.queryset, slug=self.kwargs['category_slug'])
+        category = get_object_or_404(self.queryset, pk=self.kwargs['pk'])
         serializer = self.serializer_class(category)
         return Response(serializer.data)
     permission_classes = [permissions.AllowAny]
@@ -48,21 +49,10 @@ class CategoryDetail(RetrieveAPIView):
 class ProductDetail(RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    lookup_field = 'slug'
+    lookup_field = 'pk'
 
 
     def get(self, request, *args, **kwargs):
-        product = get_object_or_404(self.queryset, slug=self.kwargs['product_slug'])
+        product = get_object_or_404(self.queryset, pk=self.kwargs['pk'])
         serializer = self.serializer_class(product)
         return Response(serializer.data)
-    
-class CategoryUpdate(generics.UpdateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-    lookup_field = 'slug'
-    def get(self, request, *args, **kwargs):
-        category = get_object_or_404(self.queryset, slug=self.kwargs['slug'])
-        serializer = self.serializer_class(category)
-        return Response(serializer.data)
-    permission_classes = [permissions.AllowAny]
-

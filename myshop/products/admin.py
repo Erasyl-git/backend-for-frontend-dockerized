@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 
     
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['product_display_name','name', 'category', 'image_show', 'price']
+    list_display = ['name', 'category', 'image_show', 'price']
     list_filter = ['category']
     search_fields = ['name']
 

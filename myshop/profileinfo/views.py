@@ -1,6 +1,4 @@
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
-
 from cart.models import CartItem
 from .models import Profile
 from .serializers import ProfileSerializer
@@ -10,7 +8,6 @@ from django.contrib.auth import authenticate, login
 from rest_framework.views import APIView
 from django.urls import reverse
 from rest_framework import status
-
 from django.contrib.auth.hashers import make_password
 
 
@@ -74,7 +71,6 @@ class CreatedUserApiView(APIView):
 
 #логин
 class LoginUserApiView(APIView):
-    @csrf_exempt
     def post(self, request):
         #получаем данные 
         data = request.data
