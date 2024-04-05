@@ -11,8 +11,6 @@ from rest_framework import status
 from django.contrib.auth.hashers import make_password
 
 
-
-
 class CreatedUserApiView(APIView):
     def post(self, request):
         try:

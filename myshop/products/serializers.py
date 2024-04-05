@@ -14,6 +14,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     products = ProductSerializer(many=True, read_only=True)
+    
+    def get_price(self, instance):
+        return instance.price
+
     class Meta:
         model = Category
         fields = '__all__'

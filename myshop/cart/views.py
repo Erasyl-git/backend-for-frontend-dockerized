@@ -1,5 +1,3 @@
-from django.http import JsonResponse
-from rest_framework import status 
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from products.serializers import ProductSerializer
@@ -8,11 +6,13 @@ from .models import CartItem
 from .serializers import CartItemSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import generics
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import *
 
+
+
 class CartDetail(APIView):
+
     queryset = CartItem.objects.all()
 
     def get(self, request, username):
@@ -39,14 +39,14 @@ class CartAdd(APIView):
 
         # Извлекаем информацию о пользователе, продукте и количестве
         username = data.get('user')
-        product_slug = data.get('product')
+        product_id = data.get('product')
         quantity = int(data.get('quantity'))  # Преобразуем в целое число
 
         # Получаем текущего пользователя по его имени
         user = get_object_or_404(User, username=username)
 
-        # Получаем продукт по его slug
-        product = get_object_or_404(Product, slug=product_slug)
+        # Получаем продукт по его id
+        product = get_object_or_404(Product, id=product_id)
 
         # Проверяем, есть ли уже такой товар в корзине пользователя
         cart_item, created = CartItem.objects.get_or_create(user=user, product=product)
@@ -70,15 +70,16 @@ class CartAdd(APIView):
 
 
 class CartUpdate(APIView):
+
     def patch(self, request):
         data = request.data
         username = data.get('user')
-        product_slug = data.get('product')
+        product_id = data.get('product')
         quantity = data.get('quantity')
         total_price = data.get('total_price')
 
         user = get_object_or_404(User, username=username)
-        product = get_object_or_404(Product, slug=product_slug)
+        product = get_object_or_404(Product, id=product_id)
         
         # Получаем объект корзины для данного пользователя и продукта
         cart_item = get_object_or_404(CartItem, user=user, product=product)
@@ -94,14 +95,14 @@ class CartUpdate(APIView):
 
 
 class CartDelete(APIView):
-    permission_classes = [AllowAny]
+
     def delete(self, request):
         data = request.data 
         username = data.get('username') 
-        product_slug = data.get('product')
+        product_id = data.get('product')
 
         user = get_object_or_404(User, username=username)
-        product = get_object_or_404(Product, slug=product_slug)
+        product = get_object_or_404(Product, id=product_id)
         
         # Получаем объект корзины для данного пользователя и продукта
         cart_item = get_object_or_404(CartItem, user=user, product=product)  

@@ -1,13 +1,10 @@
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework import generics
 from .models import Product, Category,  Product
 from .serializers import ProductSerializer, CategorySerializer
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveAPIView, ListAPIView
 from django.shortcuts import get_object_or_404
-from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import permissions
-
+from django.db.models import F
 
 
 
@@ -22,7 +19,7 @@ class CategoryList(ListAPIView):
 
 class ProductList(ListAPIView):
     serializer_class = ProductSerializer
-    #parser_classes = (MultiPartParser, FormParser)
+    queryset = Product.objects.all().prefetch_related('product').only('product')
 
     def get_queryset(self):
         category_pk = self.kwargs.get('pk')
@@ -32,7 +29,7 @@ class ProductList(ListAPIView):
             return Product.objects.filter(category=category)
         
 
-        return Product.objects.all()
+        return self.queryset
 
 class CategoryDetail(RetrieveAPIView):
     queryset = Category.objects.all()
