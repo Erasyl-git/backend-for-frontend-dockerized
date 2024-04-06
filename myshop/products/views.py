@@ -5,7 +5,7 @@ from rest_framework.generics import RetrieveAPIView, ListAPIView
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions
 from django.db.models import F
-
+from django.db.models import Prefetch
 
 
 
@@ -17,19 +17,14 @@ class CategoryList(ListAPIView):
     def get_queryset(self):
         return Category.objects.all()
 
+
 class ProductList(ListAPIView):
     serializer_class = ProductSerializer
-    queryset = Product.objects.all().prefetch_related('product').only('product')
 
     def get_queryset(self):
-        category_pk = self.kwargs.get('pk')
-        if category_pk:
-            category = get_object_or_404(Category, pk=category_pk)
-            # Фильтруем продукты по категории
-            return Product.objects.filter(category=category)
-        
-
-        return self.queryset
+        queryset = Product.objects.all()
+        return queryset.prefetch_related('category')
+    
 
 class CategoryDetail(RetrieveAPIView):
     queryset = Category.objects.all()

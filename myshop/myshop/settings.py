@@ -109,7 +109,7 @@ DATABASES = {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
     'NAME': 'khanshop', 
     'USER': 'postgres',
-    'PASSWORD': 'your password',
+    'PASSWORD': 'Erasil.08',
     'HOST': '127.0.0.1', 
     'PORT': '5432',
  }
@@ -159,3 +159,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {'class': 'logging.StreamHandler'}
+
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG'
+        }
+    }
+}
