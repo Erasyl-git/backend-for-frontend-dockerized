@@ -1,0 +1,30 @@
+services:
+  backend:
+    build: 
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./myshop:/myshop
+    environment:
+      - DB_HOST=database
+      - DB_NAME=khanshop
+      - DB_USER=user1
+      - DB_PASS=passdb
+
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+
+    depends_on:
+      - database
+
+
+  database:
+    image: postgres:15
+
+    environment:
+      - POSTGRES_DB=khanshop
+      - POSTGRES_USER=user1
+      - POSTGRES_PASSWORD=passdb
+
+

@@ -22,22 +22,26 @@ class ProductList(ListAPIView):
     serializer_class = ProductSerializer
 
     def get_queryset(self):
+        #так как у нас почему то отправляет несколько запросов в бд а именно category то я решил сделать так чтобы они не дублировались.
         queryset = Product.objects.all()
         return queryset.prefetch_related('category')
     
 
 class CategoryDetail(RetrieveAPIView):
+    #получаем данные из бд
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     lookup_field = 'pk'
 
     def get(self, request, *args, **kwargs):
+        #при получении данных мы либо отправим данные в ином случае 404
         category = get_object_or_404(self.queryset, pk=self.kwargs['pk'])
         serializer = self.serializer_class(category)
+        #отправка данных в формате json
         return Response(serializer.data)
     permission_classes = [permissions.AllowAny]
 
-
+#анологично как сверху
 class ProductDetail(RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer

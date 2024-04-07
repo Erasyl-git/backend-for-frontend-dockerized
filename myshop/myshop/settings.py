@@ -9,7 +9,7 @@ SECRET_KEY = 'django-insecure-yz&x06io4153&30=)c@5#$fhm5^qaoqm4yqx9y4b#4+aver9$n
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost:3001', '127.0.0.1','192.168.138.246']
+ALLOWED_HOSTS = ['localhost:3001', '127.0.0.1','0.0.0.0']
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -29,10 +29,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'sslserver',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+
 ]
 
 
@@ -46,7 +43,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+
 ]
 
 
@@ -59,13 +56,13 @@ REST_FREAMEWORK = {
         'rest_freamework.renderers.JSONRenderer',
         'rest_freamework.renderers.BrowsableAPIRenderer'
 
-    ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-    'rest_framework.authentication.TokenAuthentication',            
-    'rest_framework.authentication.BasicAuthentication',    
-    'rest_framework.authentication.SessionAuthentication',            
-    ]    
-
+   ],
+#   'DEFAULT_AUTHENTICATION_CLASSES': [
+#   'rest_framework.authentication.TokenAuthentication',            
+#   'rest_framework.authentication.BasicAuthentication',    
+#   'rest_framework.authentication.SessionAuthentication',            
+#   ]    
+#
 }
 # на будущее
 #SECURE_SSL_REDIRECT = True
@@ -106,25 +103,24 @@ WSGI_APPLICATION = 'myshop.wsgi.application'
 
 DATABASES = {
     'default': {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'khanshop', 
-    'USER': 'postgres',
-    'PASSWORD': 'your password',
-    'HOST': '127.0.0.1', 
-    'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': os.environ.get('DB_HOST'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASS'),
  }
 }
 
 
-AUTHENTICATION_BACKENDS = [
-
-    'django.contrib.auth.backends.ModelBackend',
-
-
-    'allauth.account.auth_backends.AuthenticationBackend',
-
-]
-
+#AUTHENTICATION_BACKENDS = [
+#
+#    'django.contrib.auth.backends.ModelBackend',
+#
+#
+#    'allauth.account.auth_backends.AuthenticationBackend',
+#
+#]
+#
 
 AUTH_PASSWORD_VALIDATORS = [
     {
