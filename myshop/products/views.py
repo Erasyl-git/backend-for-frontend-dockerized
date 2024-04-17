@@ -20,11 +20,14 @@ class CategoryList(ListAPIView):
 
 class ProductList(ListAPIView):
     serializer_class = ProductSerializer
-
+    queryset = Product.objects.all().select_related('category')
     def get_queryset(self):
+        category_pk = self.kwargs.get('pk')
+        if category_pk:
+            category = Category.objects.get(id=category_pk)
         #так как у нас почему то отправляет несколько запросов в бд а именно category то я решил сделать так чтобы они не дублировались.
-        queryset = Product.objects.all()
-        return queryset.prefetch_related('category')
+            queryset = self.queryset.filter(category=category)
+            return queryset
     
 
 class CategoryDetail(RetrieveAPIView):

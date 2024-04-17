@@ -1,7 +1,18 @@
+version: "3.8"
 services:
+
+  database:
+    image: postgres:15
+
+    environment:
+      - POSTGRES_DB=khanshop
+      - POSTGRES_USER=user1
+      - POSTGRES_PASSWORD=passdb
+
   backend:
     build: 
-      context: .
+      context: myshop
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     volumes:
@@ -13,18 +24,22 @@ services:
       - DB_PASS=passdb
 
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
-
+      sh -c "sleep 10 && python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - database
 
 
-  database:
-    image: postgres:15
 
+  frontend:
+    build:
+      context: front-shop
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      -  ./front-shop:/front-shop
     environment:
-      - POSTGRES_DB=khanshop
-      - POSTGRES_USER=user1
-      - POSTGRES_PASSWORD=passdb
+      - NODE_ENV=development
 
+    command: sh -c "sleep 10 && npm start"
 
