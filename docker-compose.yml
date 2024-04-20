@@ -24,7 +24,7 @@ services:
       - DB_PASS=passdb
 
     command: >
-      sh -c "sleep 10 && python manage.py runserver 0.0.0.0:8000"
+      sh -c "sleep 19 && python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - database
 
@@ -37,9 +37,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      -  ./front-shop:/front-shop
+      -  ./front-shop:/app
     environment:
       - NODE_ENV=development
-
-    command: sh -c "sleep 10 && npm start"
+    command: sh -c "sleep 16 && npm start"
 
